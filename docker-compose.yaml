@@ -1,0 +1,45 @@
+services:
+  # Node 1 - Master, will serve as the main database
+  master:
+    image: mysql:8.0
+    container_name: source
+    command: --server-id=1 --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: steam
+      MYSQL_USER: stadvdb
+      MYSQL_PASSWORD: stadvdb
+    ports:
+      - "4406:3306"
+    volumes:
+      - /master.sql
+
+  # Node 2 - Slave 1, will serve as backup database
+  slave1:
+    image: mysql:8.0
+    container_name: replica1
+    depends_on:
+      - master
+    command: --server-id=2 --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: steam
+      MYSQL_USER: stadvdb
+      MYSQL_PASSWORD: stadvdb
+    ports:
+      - "5506:3306"
+
+  # Node 3 - Slave 2, will serve as backup database
+  slave2:
+    image: mysql:8.0
+    container_name: replica2
+    depends_on:
+      - master
+    command: --server-id=3 --log-bin=mysql-bin --binlog-format=row
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: steam
+      MYSQL_USER: stadvdb
+      MYSQL_PASSWORD: stadvdb
+    ports:
+      - "6606:3306"
