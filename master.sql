@@ -1,5 +1,5 @@
 CHANGE MASTER TO
-  MASTER_HOST='mysql-master',
+  MASTER_HOST='master',
   MASTER_USER='stadvdb',
   MASTER_PASSWORD='stadvdb',
   MASTER_LOG_FILE='mysql-bin.000003',
