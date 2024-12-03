@@ -28,8 +28,6 @@ services:
       MYSQL_PASSWORD: stadvdb
     ports:
       - "5506:3306"
-    volumes:
-      - ./setup/slave.sql:/docker-entrypoint-initdb.d/init.sql
   # Node 3 - Slave 2, will serve as backup database
   slave2:
     image: mysql:8.0
@@ -44,5 +42,3 @@ services:
       MYSQL_PASSWORD: stadvdb
     ports:
       - "6606:3306"
-    volumes:
-      - ./setup/slave.sql:/docker-entrypoint-initdb.d/init.sql
