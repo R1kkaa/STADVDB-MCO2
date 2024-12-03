@@ -1,9 +1,8 @@
 ALTER USER 'stadvdb'@'%' IDENTIFIED WITH 'mysql_native_password' BY 'stadvdb';
 GRANT REPLICATION SLAVE ON *.* TO 'stadvdb'@'%';
 FLUSH PRIVILEGES;
-SHOW MASTER STATUS
 
-CHANGE MASTER TO
+CHANGE MASTER TO 
   MASTER_HOST='source',
   MASTER_USER='stadvdb',
   MASTER_PASSWORD='stadvdb',

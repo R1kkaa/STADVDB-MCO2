@@ -12,7 +12,7 @@ services:
     ports:
       - "4406:3306"
     volumes:
-      - /setup/master.sql
+      - ./setup/master.sql:/docker-entrypoint-initdb.d/init.sql
 
   # Node 2 - Slave 1, will serve as backup database
   slave1:
@@ -29,7 +29,7 @@ services:
     ports:
       - "5506:3306"
     volumes:
-      - /setup/slave.sql
+      - ./setup/slave.sql:/docker-entrypoint-initdb.d/init.sql
   # Node 3 - Slave 2, will serve as backup database
   slave2:
     image: mysql:8.0
@@ -45,4 +45,4 @@ services:
     ports:
       - "6606:3306"
     volumes:
-      - /setup/slave.sql
+      - ./setup/slave.sql:/docker-entrypoint-initdb.d/init.sql
