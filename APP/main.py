@@ -173,7 +173,7 @@ async def update_record(id: int, price: int):
     async with await sourcecnx.cursor() as sourcecursor:
         updatequery = ("UPDATE Game_Fact_Table SET price="+str(price)+" WHERE id="+str(id))
         first = await sourcecursor.execute(updatequery)
-        second = await sourcecursor.execute("DO SLEEP(2);")
+        second = await sourcecursor.execute("DO SLEEP(5);")
         commit = await sourcecnx.commit()
         query = ("SELECT id,name,price FROM Game_Fact_Table WHERE id="+str(id))
         third = await sourcecursor.execute(query)
@@ -193,7 +193,7 @@ async def delete_record(id: int):
         data = await sourcecursor.fetchall()
         deletequery = ("DELETE FROM Game_Fact_Table WHERE id="+str(id))
         first = await sourcecursor.execute(deletequery)
-        second = await sourcecursor.execute("DO SLEEP(2);")
+        second = await sourcecursor.execute("DO SLEEP(5);")
         commit = await sourcecnx.commit()
 
         data = await sourcecursor.fetchall()
@@ -208,7 +208,7 @@ async def insert_record(id: int, name: str, price: float, date: str = "1997-06-3
     async with await sourcecnx.cursor() as sourcecursor:
         insertquery = """INSERT INTO Game_Fact_Table (id,name,price,about,detailedDesc,shortDesc,releaseDate) VALUES (%s,%s,%s,'','','',%s);"""
         first = await sourcecursor.execute(insertquery,(id,name,price,date))
-        third = await sourcecursor.execute("DO SLEEP(2);")
+        third = await sourcecursor.execute("DO SLEEP(5);")
         commit = await sourcecnx.commit()
         query = ("SELECT id,name,price FROM Game_Fact_Table WHERE id="+str(id))
         second = await sourcecursor.execute(query)
