@@ -12,7 +12,7 @@ services:
     ports:
       - "4406:3306"
     volumes:
-      - /master.sql
+      - /setup/master.sql
 
   # Node 2 - Slave 1, will serve as backup database
   slave1:
@@ -28,7 +28,8 @@ services:
       MYSQL_PASSWORD: stadvdb
     ports:
       - "5506:3306"
-
+    volumes:
+      - /setup/slave.sql
   # Node 3 - Slave 2, will serve as backup database
   slave2:
     image: mysql:8.0
@@ -43,3 +44,5 @@ services:
       MYSQL_PASSWORD: stadvdb
     ports:
       - "6606:3306"
+    volumes:
+      - /setup/slave.sql
