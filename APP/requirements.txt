@@ -2,3 +2,4 @@ fastapi[all]
 mysql-connector-python
 asyncio
 json
+python-dotenv
