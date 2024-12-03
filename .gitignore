@@ -6,3 +6,4 @@ dev.db
 dev.db-journal
 ETL/desktop.ini
 ETL/games.json
+APP/__pycache__/main.cpython-313.pyc

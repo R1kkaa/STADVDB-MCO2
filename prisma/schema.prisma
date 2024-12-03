@@ -7,38 +7,38 @@ model Game_Fact_Table {
   id Int @id
 
   // Game Details
-  name         String   @db.VarChar(208)
+  name         String   @default("") @db.VarChar(208)
   about        String   @db.LongText
   detailedDesc String   @db.MediumText
-  shortDesc    String   @db.VarChar(999)
-  reviews      String   @db.VarChar(2931)
-  headerImg    String   @db.VarChar(113)
-  website      String   @db.VarChar(208)
-  supportURL   String   @db.VarChar(350)
-  supportEmail String   @db.VarChar(248)
-  price        Float
+  shortDesc    String   @default("") @db.VarChar(999)
+  reviews      String   @default("") @db.VarChar(2931)
+  headerImg    String   @default("") @db.VarChar(113)
+  website      String   @default("") @db.VarChar(208)
+  supportURL   String   @default("") @db.VarChar(350)
+  supportEmail String   @default("") @db.VarChar(248)
+  price        Float    @default(0)
   releaseDate  DateTime @db.Date
-  requiredAge  Int
-  dlcCount     Int
-  achievements Int
+  requiredAge  Int      @default(0)
+  dlcCount     Int      @default(0)
+  achievements Int      @default(0)
 
   // Average Playtime
-  avePlaytimeForever Int
-  avePlaytime2Weeks  Int
-  medPlaytimeForever Int
-  medPlaytime2Weeks  Int
+  avePlaytimeForever Int @default(0)
+  avePlaytime2Weeks  Int @default(0)
+  medPlaytimeForever Int @default(0)
+  medPlaytime2Weeks  Int @default(0)
 
   // Metrics
-  peakCCU         Int
-  metacriticScore Int
-  metacriticURL   String          @db.VarChar(150)
-  notes           String          @db.VarChar(2074)
-  scoreRank       String
-  userScore       Int
-  positiveReviews Int
-  negativeReviews Int
-  estimatedOwners String
-  recommendations Int
+  peakCCU         Int             @default(0)
+  metacriticScore Int             @default(0)
+  metacriticURL   String          @default("") @db.VarChar(150)
+  notes           String          @default("") @db.VarChar(2074)
+  scoreRank       String          @default("")
+  userScore       Int             @default(0)
+  positiveReviews Int             @default(0)
+  negativeReviews Int             @default(0)
+  estimatedOwners String          @default("")
+  recommendations Int             @default(0)
   // Relations
   dimPackages     dimPackage[]
   dimScreenshots  dimScreenshot[]
@@ -52,13 +52,13 @@ model Game_Fact_Table {
   dimSupport     dimSupport   @relation(fields: [dimSupportId], references: [supportId], onDelete: Cascade)
   dimTag         dimTag       @relation(fields: [dimTagId], references: [dimTagId], onDelete: Cascade)
   dimDate        dimDate      @relation(fields: [releaseDate], references: [date], onDelete: Cascade)
-  dimGenreId     Int
-  dimLanguageId  Int
-  dimDeveloperId Int
-  dimPublisherId Int
-  dimCategoryId  Int
-  dimSupportId   Int
-  dimTagId       Int
+  dimGenreId     Int          @default(0)
+  dimLanguageId  Int          @default(0)
+  dimDeveloperId Int          @default(0)
+  dimPublisherId Int          @default(0)
+  dimCategoryId  Int          @default(0)
+  dimSupportId   Int          @default(0)
+  dimTagId       Int          @default(0)
 }
 
 model TextLanguage {

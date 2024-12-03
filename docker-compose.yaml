@@ -20,7 +20,7 @@ services:
     container_name: replica1
     depends_on:
       - master
-    command: --server-id=2 --log-bin=mysql-bin --binlog-format=row
+    command: --server-id=2 --log-bin=mysql-bin --binlog-format=row  --log-slave-updates=OFF
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: steam
@@ -35,7 +35,7 @@ services:
     container_name: replica2
     depends_on:
       - master
-    command: --server-id=3 --log-bin=mysql-bin --binlog-format=row
+    command: --server-id=3 --log-bin=mysql-bin --binlog-format=row  --log-slave-updates=OFF
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: steam
