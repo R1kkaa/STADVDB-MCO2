@@ -3,29 +3,33 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 from mysql.connector.aio import connect
 import json
 import asyncio
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 sourcedb = {
-  "host":"localhost",
-  "user":"root",
-  "password":"rootpassword",
-  "port":4406,
+  "host":os.getenv("DB_IP_1"),
+  "user":os.getenv("DB_ROOT"),
+  "password":os.getenv("DB_ROOTPASSWORD"),
+  "port":int(os.getenv("DB_PORT_1")),
   "database":"steam",
 }
 
 replica1db = {
-  "host":"localhost",
-  "user":"root",
-  "password":"rootpassword",
-  "port":5506,
+  "host":os.getenv("DB_IP_2"),
+  "user":os.getenv("DB_ROOT"),
+  "password":os.getenv("DB_ROOTPASSWORD"),
+  "port":int(os.getenv("DB_PORT_2")),
   "database":"steam",
 }
 
 
 replica2db = {
-  "host":"localhost",
-  "user":"root",
-  "password":"rootpassword",
-  "port":6606,
+  "host":os.getenv("DB_IP_3"),
+  "user":os.getenv("DB_ROOT"),
+  "password":os.getenv("DB_ROOTPASSWORD"),
+  "port":int(os.getenv("DB_PORT_3")),
   "database":"steam",
 }
 app = FastAPI()
@@ -43,8 +47,8 @@ async def getconnections():
         replica1cnx = await connect(**replica1db)
         replica2cnx = await connect(**replica2db)
         await changemaster(sourcecnx)
-        await changetoslave(replica1cnx,["source"])
-        await changetoslave(replica2cnx,["source"])  
+        await changetoslave(replica1cnx,os.getenv("DB_NAME_1"))
+        await changetoslave(replica2cnx,os.getenv("DB_NAME_1"))  
         if(app.mastertoslave and app.sourceconnection):
             app.mastertoslave = False
     if(app.sourceconnection):
@@ -63,8 +67,8 @@ async def getconnections():
         replica1cnx = await connect(**replica1db)
         replica2cnx = await connect(**replica2db)
         await changemaster(replica1cnx)
-        await changetoslave(sourcecnx,["replica1"])
-        await changetoslave(replica2cnx,["replica1"])
+        await changetoslave(sourcecnx,os.getenv("DB_NAME_2"))
+        await changetoslave(replica2cnx,os.getenv("DB_NAME_2"))
         sourcecnx = await connect(**replica1db)
         if(not app.replica2connection):
             replica2cnx = await connect(**replica1db)
@@ -80,8 +84,8 @@ async def getconnections():
         replica1cnx = await connect(**replica1db)
         replica2cnx = await connect(**replica2db)
         await changemaster(replica2cnx)
-        await changetoslave(sourcecnx,["replica2"])
-        await changetoslave(replica1cnx,["replica2"])
+        await changetoslave(sourcecnx,os.getenv("DB_NAME_3"))
+        await changetoslave(replica1cnx,os.getenv("DB_NAME_3"))
         sourcecnx = await connect(**replica2db)
         if(not app.replica1connection):
             replica1cnx = await connect(**replica2db)
@@ -103,9 +107,9 @@ async def changetoslave(connection, host):
     await cursor.execute("""
                     CHANGE MASTER TO
                     MASTER_HOST=%s,
-                    MASTER_USER='stadvdb',
-                    MASTER_PASSWORD='stadvdb';
-                    """, host)
+                    MASTER_USER=%s,
+                    MASTER_PASSWORD=%s;
+                    """, [host,os.getenv("DB_USER"),os.getenv("DB_USERPASSWORD")])
     await cursor.execute("""START SLAVE;""")
     return await cursor.fetchall()
 
