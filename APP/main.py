@@ -158,15 +158,14 @@ async def read_database(id: int | None = None):
 
         data = await asyncio.gather(replica1cursor.fetchall(), sourcecursor.fetchall(), replica2cursor.fetchall())
 
-        ret = []
+        ret = {}
         for (id, name, price) in data[0]:
-            ret.append({"id":id, "name":name, "price":price})
+            ret[id]=({"id":id, "name":name, "price":price})
         for (id, name, price) in data[1]:
-            ret.append({"id":id, "name":name, "price":price})
+            ret[id]=({"id":id, "name":name, "price":price})
         for (id, name, price) in data[2]:
-            ret.append({"id":id, "name":name, "price":price})
-        json_string = json.dumps(ret)
-        return {json_string}
+            ret[id]=({"id":id, "name":name, "price":price})
+        return ret
 
 @app.get("/update")
 async def update_record(id: int, price: int):
@@ -180,11 +179,10 @@ async def update_record(id: int, price: int):
         third = await sourcecursor.execute(query)
 
         data = await sourcecursor.fetchall()
-        ret = []
+        ret = {}
         for (id, name, price) in data:
-            ret.append({"id":id, "name":name, "price":price})
-        json_string = json.dumps(ret)
-        return {json_string}
+            ret[id]=({"id":id, "name":name, "price":price})
+        return ret
 
 @app.get("/delete")
 async def delete_record(id: int):
@@ -198,11 +196,11 @@ async def delete_record(id: int):
         second = await sourcecursor.execute("DO SLEEP(2);")
         commit = await sourcecnx.commit()
 
-        ret = []
+        data = await sourcecursor.fetchall()
+        ret = {}
         for (id, name, price) in data:
-            ret.append({"id":id, "name":name, "price":price})
-        json_string = json.dumps(ret)
-        return {json_string}
+            ret[id]=({"id":id, "name":name, "price":price})
+        return ret
 
 @app.get("/insert")
 async def insert_record(id: int, name: str, price: float, date: str = "1997-06-30"):
@@ -216,11 +214,10 @@ async def insert_record(id: int, name: str, price: float, date: str = "1997-06-3
         second = await sourcecursor.execute(query)
         data = await sourcecursor.fetchall()
 
-        ret = []
+        ret = {}
         for (id, name, price) in data:
-            ret.append({"id":id, "name":name, "price":price})
-        json_string = json.dumps(ret)
-        return {json_string}
+            ret[id]=({"id":id, "name":name, "price":price})
+        return ret
 
 @app.get("/master")
 async def setconnection(conn: bool):
